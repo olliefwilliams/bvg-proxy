@@ -21,6 +21,13 @@ const proxy = createProxyMiddleware(proxySettings);
 
 app.use(URL_PATH, proxy);
 
+app.use((req, res, next) => {
+	res.status(404).json({
+		message: 'Incorrect endpoint URL'
+	})
+})
+
+
 // now start the server
 app.listen(PORT, HOST, () => {
 	console.log(
