@@ -19,11 +19,14 @@ const proxySettings = {
 	onProxyRes: responseInterceptor(async (responseBuffer, proxyRes, req, res) => {
 		// convert response to a variable so we can manipulate it
 		let data = JSON.parse(responseBuffer.toString('utf8'));
-
 		let newData = {};
 		let currTime = new Date();
 		for (const bus of data.departures) {
-			console.log(`${bus.line.id} going to ${bus.destination.name}`);
+			let arrTime = new Date(bus.when) // gotta convert to object
+			let countdown = (arrTime - currTime) / 60000;
+			const regex = /( [\(\[].+[\)\]])+/; // everything between & including brackets
+			let trimmedDestination = bus.destination.name.replace(regex, ''); // remove that stuff
+			console.log(`${bus.line.id} going to ${trimmedDestination} in ${Math.floor(countdown)}min, occupancy is: ${bus.occupancy}`);
 		}
 		// convert variable to the JSON notation
 		return JSON.stringify(data); // ORIGINAL 
