@@ -21,6 +21,9 @@ const proxySettings = {
 		let data = JSON.parse(responseBuffer.toString('utf8'));
 		let newData = {};
 		let currTime = new Date();
+		// sort departures based on their destination
+		data.departures.sort((a, b) => a.destination.name.localeCompare(b.destination.name));
+
 		for (const bus of data.departures) {
 			let arrTime = new Date(bus.when) // gotta convert to object
 			let countdown = (arrTime - currTime) / 60000;
@@ -28,8 +31,7 @@ const proxySettings = {
 			let trimmedDestination = bus.destination.name.replace(regex, ''); // remove that stuff
 			console.log(`${bus.line.id} going to ${trimmedDestination} in ${Math.floor(countdown)}min, occupancy is: ${bus.occupancy}`);
 		}
-		// convert variable to the JSON notation
-		return JSON.stringify(data); // ORIGINAL 
+		return JSON.stringify(data); // convert back to JSON notation
 	}),
 }
 
