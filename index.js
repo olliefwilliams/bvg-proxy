@@ -23,10 +23,10 @@ const proxySettings = {
 		let currTime = new Date();
 		// sort departures based on their destination
 		data.departures.sort((a, b) => a.destination.name.localeCompare(b.destination.name));
-
+		console.log(req);
 		for (const bus of data.departures) {
 			let arrTime = new Date(bus.when) // gotta convert to object
-			let countdown = (arrTime - currTime) / 60000;
+			let countdown = (arrTime - currTime) / 60000; // convert to mins
 			const regex = /( [\(\[].+[\)\]])+/; // everything between & including brackets
 			let trimmedDestination = bus.destination.name.replace(regex, ''); // remove that stuff
 			console.log(`${bus.line.id} going to ${trimmedDestination} in ${Math.floor(countdown)}min, occupancy is: ${bus.occupancy}`);
